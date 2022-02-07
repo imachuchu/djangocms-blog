@@ -61,7 +61,9 @@ class BaseBlogListView(BaseBlogView):
         return context
 
     def get_paginate_by(self, queryset):
-        return (self.config and self.config.paginate_by) or get_setting("PAGINATION")
+        passed = self.request.GET.get("per_page")
+        passed = passed if passed.isdigit() else None
+        return passed or (self.config and self.config.paginate_by) or get_setting("PAGINATION")
 
 
 class PostDetailView(TranslatableSlugMixin, BaseBlogView, DetailView):
